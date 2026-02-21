@@ -122,10 +122,7 @@ const QUESTIONS = [
   {id:30, title:'Commute', left:{title:"I'LL COMMUTE BY CAR DAILY",emoji:'🚗⏰',gradient:'linear-gradient(135deg,#8B8A8A,#6F6F6F)',pros:['Flexibility','Suburban living options'],cons:['Traffic','Gas','Stress'],tags:['car_commuter','suburban_ok','highway_access']},
     right:{title:'I WORK REMOTE / NO COMMUTE',emoji:'🏠💻',gradient:'linear-gradient(135deg,#FFD8B1,#FFB78A)',pros:['Live anywhere','No traffic stress'],cons:['Need good internet','Home office space'],tags:['remote_worker','location_flexible','internet_priority']}
   },
-  // Q31
-  {id:31, title:'Internet', left:{title:'FAST INTERNET IS NON-NEGOTIABLE',emoji:'⚡🌐',gradient:'linear-gradient(135deg,#3AB0FF,#2C8BFF)',pros:['Work from home','Streaming','Future-proof'],cons:['Limits rural options'],tags:['fast_internet','urban_or_suburban','tech_priority']},
-    right:{title:'BASIC INTERNET IS FINE',emoji:'📶🌲',gradient:'linear-gradient(135deg,#9FD79D,#6FB57A)',pros:['Can live more rural'],cons:['Slow speeds','Remote work challenges'],tags:['basic_internet_ok','rural_ok']}
-  },
+  // Q31 REMOVED (internet question removed per spec)
   // Q32
   {id:32, title:'Healthcare', left:{title:'PROXIMITY TO TOP HOSPITALS IS IMPORTANT',emoji:'🏥⭐',gradient:'linear-gradient(135deg,#DDEEFE,#B8D9FF)',pros:['Specialist access','Emergency care','Research hospitals'],cons:['Usually near a city','Higher cost'],tags:['healthcare_priority','major_metro_adjacent','hospital_access']},
     right:{title:'STANDARD HEALTHCARE IS FINE',emoji:'🏥✅',gradient:'linear-gradient(135deg,#CDEAD0,#99D4A8)',pros:['More location flexibility'],cons:['May travel for specialists'],tags:['standard_healthcare','flexible_location']}
@@ -171,7 +168,7 @@ const QUESTIONS = [
 // data later. Default here is to disable listings to remove placeholder
 // listings from the prototype.
 const CONFIG = {
-  enableListings: true, // set to true to enable generated placeholder listings
+  enableListings: true, // enable generated locations (listings UI removed separately)
   realListingsUrl: '/data/listings.json' // optional hook for real listings
 };
 
@@ -458,13 +455,13 @@ if(CONFIG.enableListings){
     }
   }
 
-  // add synthetic extra names from states until >=300
+  // add synthetic extra names from states until >=600 (more potential places)
   const fillerNames = [
     'Lincoln','Riverton','Fairview','Centerville','Oak Grove','Maplewood','Riverside','Highland','Clearwater','Springfield','Summit','Cedar Grove','Pleasantville',' Meadowbrook','Willow Creek','Sunnyside','Edgewater','Rosewood','Hillside','Silver Lake'
   ];
   // iterate states to fill
   const states = Object.keys(REGIONS_MAP);
-  let si=0; while(LOCATIONS.length<310){
+  let si=0; while(LOCATIONS.length<600){
     const state = states[si % states.length];
     const name = fillerNames[(si) % fillerNames.length] + ' ' + state;
     LOCATIONS.push(enrich(name,state,REGIONS_MAP[state]));
@@ -496,8 +493,38 @@ function qsa(sel,el=document) { return Array.from(el.querySelectorAll(sel)); }
 
 function showScreen(id){ qsa('.screen').forEach(s=>s.classList.remove('active')); qs(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
 
-// Landing -> Onboarding
-qs('#start-btn').addEventListener('click',()=>{ showScreen('#screen-onboarding'); });
+// Landing -> Occupation (new flow)
+qs('#start-btn').addEventListener('click',()=>{ showScreen('#screen-occupation'); });
+
+// Occupation handlers
+state.job = { occupation: '', commuteMax: 30, preferredRegion: '', preferredStates: [] };
+qs('#commute-max').addEventListener('input', e=>{ qs('#commute-val').textContent = e.target.value; state.job.commuteMax = parseInt(e.target.value,10); });
+qs('#occupation-continue').addEventListener('click', e=>{ e.preventDefault(); state.job.occupation = qs('#occupation-input').value || ''; state.job.preferredRegion = qs('#preferred-region').value || ''; state.job.preferredStates = (qs('#preferred-states').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
+  // ask whether to take a short job-specific 15-question quiz
+  if(confirm('Take a short 15-question job-specific quiz now? (You can skip)')){
+    state.currentQuestions = buildJobQuestions(state.job.occupation);
+  } else {
+    state.currentQuestions = QUESTIONS;
+  }
+  startQuiz();
+});
+
+qs('#occupation-skip').addEventListener('click', e=>{ e.preventDefault(); state.currentQuestions = QUESTIONS; startQuiz(); });
+
+function buildJobQuestions(occupation){
+  // Simple heuristic: prioritize commute/transport/healthcare/work-related questions
+  const kws = (occupation||'').toLowerCase();
+  const priorityTags = [];
+  if(kws.match(/engineer|developer|software|tech/)) priorityTags.push('fast_internet','transit_accessible','major_metro','amenity_rich');
+  if(kws.match(/nurse|doctor|health|hospital|medical/)) priorityTags.push('hospital_access','healthcare_priority','quiet_nights');
+  if(kws.match(/teacher|professor|education/)) priorityTags.push('good_schools_priority','university_town');
+  if(kws.match(/remote|remote worker|work from home/)) priorityTags.push('remote_worker','fast_internet');
+  // pick up to 15 questions that match priorityTags first, then fill with other important questions
+  const picked = [];
+  for(const q of QUESTIONS){ if(picked.length>=15) break; const tset = q.left.tags.concat(q.right.tags); if(priorityTags.some(pt=> tset.includes(pt))){ picked.push(q); }}
+  for(const q of QUESTIONS){ if(picked.length>=15) break; if(!picked.includes(q)) picked.push(q); }
+  return picked.slice(0,15);
+}
 
 // Onboarding pills
 qsa('.pills').forEach(pwrap=>{
@@ -526,17 +553,21 @@ qs('#onboard-go').addEventListener('click',e=>{ e.preventDefault(); startQuiz();
 function startQuiz(){
   // persist onboarding
   localStorage.setItem('homeswipe_onboard', JSON.stringify(state.onboarding));
-  state.currentQ = 0; state.answers = []; resetScores(); showQuestion(0);
+  state.currentQ = 0; state.answers = []; resetScores();
+  // ensure we have a questions set
+  if(!state.currentQuestions) state.currentQuestions = QUESTIONS;
+  showQuestion(0);
   showScreen('#screen-quiz');
 }
 
 // Show question index
 function showQuestion(idx){
   state.currentQ = idx;
-  const q = QUESTIONS[idx];
+  const qset = state.currentQuestions || QUESTIONS;
+  const q = qset[idx];
   if(!q) return finishQuiz();
-  qs('#progress-text').textContent = `Question ${idx+1} of ${QUESTIONS.length}`;
-  const prog = Math.round(((idx)/QUESTIONS.length)*100);
+  qs('#progress-text').textContent = `Question ${idx+1} of ${qset.length}`;
+  const prog = Math.round(((idx)/qset.length)*100);
   qs('#progress-bar').style.width = prog+'%';
 
   const area = qs('#cards-area'); area.innerHTML='';
@@ -582,9 +613,11 @@ function chooseOption(option){
   }
 
   // move next
+  const qset = state.currentQuestions || QUESTIONS;
   const next = state.currentQ+1;
   // interim hints after Q8,16,24,32,40 (i.e., after indexes 7,15,23,31,39)
-  if([8,16,24,32,40].includes(next)){
+  const hintIndexes = [8,16,24,32,40].filter(i=> i <= qset.length);
+  if(hintIndexes.includes(next)){
     showHintOverlay(next);
   } else {
     showQuestion(next);
@@ -624,7 +657,7 @@ function formatRegionName(r){
 }
 
 // Skip and Back
-qs('#skip-btn').addEventListener('click',e=>{ e.preventDefault(); const next = state.currentQ+1; if([8,16,24,32,40].includes(next)) showHintOverlay(next); else showQuestion(next); });
+qs('#skip-btn').addEventListener('click',e=>{ e.preventDefault(); const qset = state.currentQuestions || QUESTIONS; const next = state.currentQ+1; const hintIndexes = [8,16,24,32,40].filter(i=> i <= qset.length); if(hintIndexes.includes(next)) showHintOverlay(next); else showQuestion(next); });
 qs('#back-btn').addEventListener('click',e=>{ e.preventDefault(); if(state.answers.length>0){ state.answers.pop(); // TODO ideally remove score contributions (not implemented: simplified approach)
   // we will recompute scores from scratch from answers
   resetScores(); for(const ans of state.answers){ for(const t of ans){ for(const loc of LOCATIONS){ if(loc.tags.includes(t)) state.scores[loc.name+'|'+loc.state]+=3; } }}
@@ -636,58 +669,62 @@ qs('#exit-quiz').addEventListener('click',e=>{ e.preventDefault(); if(confirm('E
 
 // Finish quiz
 function finishQuiz(){
-  // budget penalties
-  const budget = state.onboarding.budget;
-  for(const key in state.scores){ const [name,st]=key.split('|'); const loc = LOCATIONS.find(l=>l.name===name && l.state===st); const price = priceToNumber(loc.medianHomePrice);
-    if(budget==='under_200' && price>300000) state.scores[key]-=20;
-    if(budget==='200_400' && price>600000) state.scores[key]-=15;
-    if(budget==='400_700' && price>900000) state.scores[key]-=10;
-    if(budget==='700_1m' && price>1300000) state.scores[key]-=5;
+  // Scoring: for each location, count how many answered questions
+  // have at least one tag that matches the location. Then score is
+  // (matches / total questions in quiz) rounded to nearest percent.
+  const qset = state.currentQuestions || QUESTIONS;
+  const totalQuestions = qset.length || 1;
+  // apply preferred region/state filters if provided
+  let pool = LOCATIONS.slice();
+  if(state.job){
+    if(state.job.preferredRegion){ pool = pool.filter(l=> l.region === state.job.preferredRegion); }
+    if(state.job.preferredStates && state.job.preferredStates.length){ pool = pool.filter(l=> state.job.preferredStates.includes(l.state)); }
   }
-
-  // normalize
-  const entries = Object.entries(state.scores).map(([k,v])=>({k,v}));
-  const max = Math.max(...entries.map(e=>e.v));
-  const normalized = entries.map(e=>({k:e.k, raw:e.v, score: Math.max(1, Math.round((e.v/max)*100))}));
-  normalized.sort((a,b)=>b.score-a.score);
-  state.ranked = normalized;
-  // top 10
-  state.top10 = normalized.slice(0,10).map(item=>{ const [name,st]=item.k.split('|'); const loc = LOCATIONS.find(l=>l.name===name && l.state===st); return {...loc,score:item.score}; });
-
+  const ranked = pool.map(loc=>{
+    let matches = 0;
+    for(let i=0;i<qset.length;i++){
+      const ansTags = state.answers[i] || [];
+      if(ansTags.some(t=> loc.tags.includes(t))) matches++;
+    }
+    const score = Math.round((matches / totalQuestions) * 100);
+    return { loc, matches, score };
+  });
+  ranked.sort((a,b)=> b.score - a.score || b.matches - a.matches);
+  state.ranked = ranked.map(r=>({k: r.loc.name+'|'+r.loc.state, raw: r.matches, score: r.score}));
+  state.top10 = ranked.slice(0,10).map(r=> ({...r.loc, score: r.score }));
   showResults();
 }
 
 function showResults(){
   showScreen('#screen-results');
   const grid = qs('#results-grid'); grid.innerHTML='';
-  state.top10.forEach((loc,i)=>{
+  // Matched (score > 0)
+  const matched = state.top10;
+  const matchedSection = document.createElement('div'); matchedSection.innerHTML = `<h3>Your Top Matches</h3>`;
+  matched.forEach((loc,i)=>{
     const card = document.createElement('div'); card.className='result-card';
     card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><div><div class="rank">#${i+1} ${loc.name}, ${loc.state}</div><div style="color:#666;margin-top:6px">Population: ${loc.population} • <small>${loc.region}</small></div></div><div><div class="match-badge">Match: ${loc.score}/100</div><div style="margin-top:8px"> <small class="region-badge">${loc.region}</small></div></div></div><div style="margin-top:12px">${loc.highlights.slice(0,3).map(t=>`<span class="tag-chip">${t}</span>`).join('')}</div><div style="margin-top:12px"><button class="cta small view-details" data-name="${loc.name}" data-state="${loc.state}">View Details →</button></div>`;
-    grid.appendChild(card);
+    matchedSection.appendChild(card);
   });
+  grid.appendChild(matchedSection);
 
+  // Not matched (score === 0) - show a short list of examples
+  const notMatched = state.ranked.filter(r=> r.score === 0).slice(0,10);
+  if(notMatched.length){
+    const nmSection = document.createElement('div'); nmSection.innerHTML = `<h3>Places you didn't match</h3>`;
+    nmSection.innerHTML += notMatched.map(r=>{ const [name,st]=r.k.split('|'); return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f1f1"><div>${name}, ${st}</div><div>${r.score}/100</div></div>`; }).join('');
+    grid.appendChild(nmSection);
+  }
+
+  // attach view details handlers for matched cards
   qsa('.view-details').forEach(btn=> btn.addEventListener('click',e=>{
     const name = btn.dataset.name; const st = btn.dataset.state; const loc = LOCATIONS.find(l=>l.name===name && l.state===st); openDetails(loc);
   }));
-
-  // all list
-  const allList = qs('#all-list');
-  if(LOCATIONS.length === 0){
-    allList.innerHTML = '<div class="muted">Listings are disabled in this prototype.</div>';
-    const seeBtn = qs('#see-all-btn'); if(seeBtn) seeBtn.style.display = 'none';
-  } else {
-    allList.innerHTML = state.ranked.map(r=>{ const [name,st] = r.k.split('|'); return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f1f1"><div>${name}, ${st}</div><div>${r.score}/100</div></div>`; }).join('');
-    const seeBtn = qs('#see-all-btn'); if(seeBtn) seeBtn.addEventListener('click',()=>{ qs('#all-list').classList.toggle('hidden'); });
-  }
 }
 
 function openDetails(loc){
-  qs('#details-content').innerHTML = `<h2>${loc.name}, ${loc.state} <span class="match-badge">${loc.population}</span></h2><p>${loc.vibe}</p><h3>Why this place fits you</h3><ul>${loc.tags.slice(0,6).map(t=>`<li>You chose ${t.replace(/_/g,' ')} and ${loc.name} has ${t.replace(/_/g,' ')} features.</li>`).join('')}</ul><h3>Possible tradeoffs</h3><ul><li>Some local differences may exist compared to your choices.</li></ul><h3>Data Snapshot</h3><div>Median home price: ${loc.medianHomePrice} • Property tax: ${loc.propertyTaxLevel} • Schools: ${loc.schoolRating} • Safety: ${loc.safetyLevel}</div><h3>Highlights</h3><ul>${loc.highlights.map(h=>`<li>${h}</li>`).join('')}</ul><h3>Current Listings</h3><div style="display:flex;gap:8px">${[1,2,3].map(i=>`<div style="background:#eee;border-radius:8px;padding:12px;flex:1"><div style="height:80px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:8px;margin-bottom:8px"></div><div style="font-weight:600">${formatPrice( (priceToNumber(loc.medianHomePrice) * (0.8 + i*0.1)) )}</div><div style="color:#666">${3+i} bed / ${2+i} bath</div><a href="#">View Listing</a></div>`).join('')}</div><div style="margin-top:12px"><button id="save-place" class="cta small">Save This Place ❤️</button></div>`;
-  // If listings are disabled, omit the fake "Current Listings" section
-  if(LOCATIONS.length === 0){
-    const base = `<h2>${loc.name}, ${loc.state} <span class="match-badge">${loc.population}</span></h2><p>${loc.vibe}</p><h3>Why this place fits you</h3><ul>${loc.tags.slice(0,6).map(t=>`<li>You chose ${t.replace(/_/g,' ')} and ${loc.name} has ${t.replace(/_/g,' ')} features.</li>`).join('')}</ul><h3>Possible tradeoffs</h3><ul><li>Some local differences may exist compared to your choices.</li></ul><h3>Data Snapshot</h3><div>Median home price: ${loc.medianHomePrice} • Property tax: ${loc.propertyTaxLevel} • Schools: ${loc.schoolRating} • Safety: ${loc.safetyLevel}</div><h3>Highlights</h3><ul>${loc.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>`;
-    qs('#details-content').innerHTML = base + `<div style="margin-top:12px"><button id="save-place" class="cta small">Save This Place ❤️</button></div>`;
-  }
+  // Render details without showing current listing placeholders
+  qs('#details-content').innerHTML = `<h2>${loc.name}, ${loc.state} <span class="match-badge">Population: ${loc.population}</span></h2><p>${loc.vibe}</p><h3>Why this place fits you</h3><ul>${loc.tags.slice(0,6).map(t=>`<li>You chose ${t.replace(/_/g,' ')} and ${loc.name} has ${t.replace(/_/g,' ')} features.</li>`).join('')}</ul><h3>Possible tradeoffs</h3><ul><li>Some local differences may exist compared to your choices.</li></ul><h3>Data Snapshot</h3><div>Median home price: ${loc.medianHomePrice} • Property tax: ${loc.propertyTaxLevel} • Schools: ${loc.schoolRating} • Safety: ${loc.safetyLevel}</div><h3>Highlights</h3><ul>${loc.highlights.map(h=>`<li>${h}</li>`).join('')}</ul><div style="margin-top:12px"><button id="save-place" class="cta small">Save This Place ❤️</button></div>`;
   qs('#details-modal').classList.remove('hidden');
   qs('#save-place')?.addEventListener('click',()=>{ savePlace(loc); });
 }

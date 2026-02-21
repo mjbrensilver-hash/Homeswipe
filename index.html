@@ -33,6 +33,45 @@
       <footer class="footer-links">About · FAQ · Privacy</footer>
     </main>
 
+    <!-- SCREEN: Occupation (new) -->
+    <section id="screen-occupation" class="screen">
+      <h2>Where do you work?</h2>
+      <p class="muted">This helps us prioritize towns close to your job.</p>
+      <form id="occupation-form" class="onboard">
+        <div class="field">
+          <label>Occupation / Job title</label>
+          <input id="occupation-input" placeholder="e.g., Software engineer, Nurse, Teacher" />
+        </div>
+        <div class="field">
+          <label>Maximum comfortable commute (miles)</label>
+          <input id="commute-max" type="range" min="0" max="120" value="30" />
+          <div class="small-muted">Up to <span id="commute-val">30</span> miles</div>
+        </div>
+        <div class="field">
+          <label>Region preference (optional)</label>
+          <select id="preferred-region">
+            <option value="">No preference</option>
+            <option value="northeast">Northeast</option>
+            <option value="southeast">Southeast</option>
+            <option value="midwest">Midwest</option>
+            <option value="southwest">Southwest</option>
+            <option value="west">West Coast</option>
+            <option value="pacific_northwest">Pacific Northwest</option>
+            <option value="mountain_west">Mountain West</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Choose specific states (optional)</label>
+          <input id="preferred-states" placeholder="Comma-separated state codes, e.g., NY,MA,CT" />
+        </div>
+        <div class="onboard-actions">
+          <button id="occupation-continue" class="cta small">Continue</button>
+          <a href="#" id="occupation-skip" class="link-muted">Skip — no workplace</a>
+        </div>
+        <p class="disclaimer">You can optionally take a short 15-question job-specific quiz after this to refine places near your workplace.</p>
+      </form>
+    </section>
+
     <!-- SCREEN: Onboarding -->
     <section id="screen-onboarding" class="screen">
       <h2>A few basics first.</h2>
@@ -46,6 +85,7 @@
             <button type="button" class="pill" data-value="400_700">$400k–$700k</button>
             <button type="button" class="pill" data-value="700_1m">$700k–$1M</button>
             <button type="button" class="pill" data-value="1m_plus">$1M+</button>
+            <button type="button" class="pill" data-value="3m_plus">$3M+</button>
           </div>
         </div>
 
@@ -117,7 +157,7 @@
     <!-- SCREEN: Results -->
     <section id="screen-results" class="screen">
       <h2>🏠 Your Top 10 Matches Across America</h2>
-      <p class="muted">Based on your 40 answers, here are the places that fit you best — from coast to coast.</p>
+      <p class="muted">Based on your answers, here are the places that fit you best — from coast to coast.</p>
       <div id="results-grid" class="results-grid"></div>
       <div class="results-actions">
         <button id="retake-btn" class="cta">Retake Quiz</button>
