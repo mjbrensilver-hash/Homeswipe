@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HomeSwipe — Swipe Your Way Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="page fade-in">
+    <!-- NAV -->
+    <nav class="topbar">
+      <div class="brand" tabindex="0">HomeSwipe</div>
+      <div class="nav-right">
+        <a href="#" id="saved-link" class="saved-link">❤️ Saved</a>
+      </div>
+    </nav>
+
+    <!-- SCREEN: Landing -->
+    <main id="screen-landing" class="screen active">
+      <section class="hero">
+        <h1 class="headline">Swipe Your Way Home.</h1>
+        <p class="subheadline">Not sure where in America you belong? Answer quick this-or-that questions and discover the cities, towns, and suburbs that actually fit your life — from Maine to Hawaii.</p>
+        <button id="start-btn" class="cta">Start Swiping →</button>
+        <div class="how-it-works">
+          <div class="step"><div class="step-icon">👆</div><div class="step-text">Swipe through lifestyle cards</div></div>
+          <div class="step"><div class="step-icon">📍</div><div class="step-text">Watch us narrow down your ideal region</div></div>
+          <div class="step"><div class="step-icon">🏠</div><div class="step-text">Get your top 10 matching places with scores</div></div>
+        </div>
+        <div class="badge">Covers all 50 states • 300+ cities & towns • From big metros to hidden gems</div>
+      </section>
+      <footer class="footer-links">About · FAQ · Privacy</footer>
+    </main>
+
+    <!-- SCREEN: Onboarding -->
+    <section id="screen-onboarding" class="screen">
+      <h2>A few basics first.</h2>
+      <p class="muted">These help us filter out obvious bad fits. The real magic comes from your swipes.</p>
+      <form id="onboard-form" class="onboard">
+        <div class="field">
+          <label>Budget range</label>
+          <div class="pills" data-name="budget">
+            <button type="button" class="pill" data-value="under_200">Under $200k</button>
+            <button type="button" class="pill" data-value="200_400">$200k–$400k</button>
+            <button type="button" class="pill" data-value="400_700">$400k–$700k</button>
+            <button type="button" class="pill" data-value="700_1m">$700k–$1M</button>
+            <button type="button" class="pill" data-value="1m_plus">$1M+</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Home type (select any)</label>
+          <div class="pills" data-name="homeType" data-multi="true">
+            <button type="button" class="pill" data-value="single_family">Single-family</button>
+            <button type="button" class="pill" data-value="condo">Condo/Townhouse</button>
+            <button type="button" class="pill" data-value="apartment">Apartment</button>
+            <button type="button" class="pill" data-value="flexible">Flexible</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Timeline</label>
+          <div class="pills" data-name="timeline">
+            <button type="button" class="pill" data-value="asap">ASAP</button>
+            <button type="button" class="pill" data-value="6_12">6–12 months</button>
+            <button type="button" class="pill" data-value="browsing">Just browsing</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Any must-haves?</label>
+          <input id="must-haves" placeholder="e.g., must be within 30 min of NYC, or near the beach" />
+        </div>
+
+        <div class="onboard-actions">
+          <button id="onboard-go" class="cta small">Let's Go →</button>
+          <a href="#" id="skip-onboard" class="link-muted">Skip for now</a>
+        </div>
+        <p class="disclaimer">All cultural, religious, and political information is based on public, aggregate data and is meant to help you understand area 'feel,' not to exclude or target any individuals.</p>
+      </form>
+    </section>
+
+    <!-- SCREEN: Quiz -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-top">
+        <a href="#" id="brand-home" class="brand-small">HomeSwipe</a>
+        <div class="progress-wrap">
+          <div class="progress-text" id="progress-text">Question 1 of 40</div>
+          <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+        </div>
+        <a href="#" id="exit-quiz" class="link-muted">✕ Exit</a>
+      </div>
+
+      <div id="cards-area" class="cards-area">
+        <!-- Two cards will be injected here -->
+      </div>
+
+      <div class="quiz-controls">
+        <a href="#" id="back-btn" class="link-muted">← Back</a>
+        <a href="#" id="skip-btn" class="link-muted">Skip — I don't care about this</a>
+      </div>
+    </section>
+
+    <!-- INTERIM HINT overlay -->
+    <div id="hint-overlay" class="overlay hidden">
+      <div class="hint-card">
+        <h3>Quick snapshot of your preferences so far…</h3>
+        <div id="hint-chips" class="chips"></div>
+        <div id="hint-region" class="hint-region"></div>
+        <div id="hint-states" class="hint-states"></div>
+        <p class="small-muted">This is just a rough snapshot — keep going!</p>
+        <button id="hint-continue" class="cta small">Continue Swiping →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN: Results -->
+    <section id="screen-results" class="screen">
+      <h2>🏠 Your Top 10 Matches Across America</h2>
+      <p class="muted">Based on your 40 answers, here are the places that fit you best — from coast to coast.</p>
+      <div id="results-grid" class="results-grid"></div>
+      <div class="results-actions">
+        <button id="retake-btn" class="cta">Retake Quiz</button>
+        <button id="see-all-btn" class="cta alt">See all 300+ locations ranked →</button>
+      </div>
+      <div id="all-list" class="all-list hidden"></div>
+      <p class="disclaimer">Cultural, religious, and political info is based on public aggregate data to help you understand area feel, not to exclude anyone.</p>
+    </section>
+
+    <!-- DETAILS MODAL -->
+    <div id="details-modal" class="overlay hidden">
+      <div class="details-card" role="dialog" aria-modal="true">
+        <button id="details-close" class="close">← Back to Results</button>
+        <div id="details-content"></div>
+      </div>
+    </div>
+
+    <!-- SAVED PLACES PANEL -->
+    <div id="saved-panel" class="overlay hidden">
+      <div class="saved-card">
+        <h3>Saved Places</h3>
+        <div id="saved-list"></div>
+        <button id="saved-close" class="close">Close</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
