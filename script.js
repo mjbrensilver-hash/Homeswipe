@@ -172,10 +172,119 @@ const CONFIG = {
   realListingsUrl: '/data/listings.json' // optional hook for real listings
 };
 
+<<<<<<< HEAD
 // Primary locations list will be populated from an external build producing
 // `data/locations/us_locations.json` (produced by `bin/build_us_locations.sh`).
 // Fall back to an empty list so the app can still run in degraded mode.
 let mandatory = [];
+=======
+// We'll include all mandatory locations explicitly in a compact mapping, then generate more names to reach 300+.
+
+const mandatory = [
+  // ALABAMA
+  {name:'Birmingham',state:'AL',region:'southeast'},{name:'Huntsville',state:'AL',region:'southeast'},{name:'Mountain Brook',state:'AL',region:'southeast'},{name:'Fairhope',state:'AL',region:'southeast'},
+  // ALASKA
+  {name:'Anchorage',state:'AK',region:'mountain_west'},{name:'Juneau',state:'AK',region:'mountain_west'},{name:'Sitka',state:'AK',region:'mountain_west'},{name:'Wasilla',state:'AK',region:'mountain_west'},
+  // ARIZONA
+  {name:'Phoenix',state:'AZ',region:'southwest'},{name:'Scottsdale',state:'AZ',region:'southwest'},{name:'Tucson',state:'AZ',region:'southwest'},{name:'Sedona',state:'AZ',region:'southwest'},{name:'Flagstaff',state:'AZ',region:'southwest'},{name:'Gilbert',state:'AZ',region:'southwest'},
+  // ARKANSAS
+  {name:'Little Rock',state:'AR',region:'southeast'},{name:'Fayetteville',state:'AR',region:'southeast'},{name:'Bentonville',state:'AR',region:'southeast'},{name:'Hot Springs',state:'AR',region:'southeast'},
+  // CALIFORNIA (12)
+  {name:'San Francisco',state:'CA',region:'west'},{name:'Los Angeles',state:'CA',region:'west'},{name:'San Diego',state:'CA',region:'west'},{name:'Sacramento',state:'CA',region:'west'},{name:'Santa Barbara',state:'CA',region:'west'},{name:'San Luis Obispo',state:'CA',region:'west'},{name:'Palo Alto',state:'CA',region:'west'},{name:'Irvine',state:'CA',region:'west'},{name:'Pasadena',state:'CA',region:'west'},{name:'Berkeley',state:'CA',region:'west'},{name:'Carlsbad',state:'CA',region:'west'},{name:'Napa',state:'CA',region:'west'},
+  // COLORADO
+  {name:'Denver',state:'CO',region:'mountain_west'},{name:'Boulder',state:'CO',region:'mountain_west'},{name:'Colorado Springs',state:'CO',region:'mountain_west'},{name:'Fort Collins',state:'CO',region:'mountain_west'},{name:'Aspen',state:'CO',region:'mountain_west'},{name:'Durango',state:'CO',region:'mountain_west'},
+  // CONNECTICUT
+  {name:'Greenwich',state:'CT',region:'northeast'},{name:'Westport',state:'CT',region:'northeast'},{name:'New Haven',state:'CT',region:'northeast'},{name:'Hartford',state:'CT',region:'northeast'},{name:'Stamford',state:'CT',region:'northeast'},
+  // DELAWARE
+  {name:'Wilmington',state:'DE',region:'northeast'},{name:'Rehoboth Beach',state:'DE',region:'northeast'},{name:'Newark',state:'DE',region:'northeast'},{name:'Dover',state:'DE',region:'northeast'},
+  // FLORIDA (10)
+  {name:'Miami',state:'FL',region:'southeast'},{name:'Tampa',state:'FL',region:'southeast'},{name:'Orlando',state:'FL',region:'southeast'},{name:'Jacksonville',state:'FL',region:'southeast'},{name:'Sarasota',state:'FL',region:'southeast'},{name:'Naples',state:'FL',region:'southeast'},{name:'St. Augustine',state:'FL',region:'southeast'},{name:'Key West',state:'FL',region:'southeast'},{name:'Winter Park',state:'FL',region:'southeast'},{name:'Coral Gables',state:'FL',region:'southeast'},
+  // GEORGIA
+  {name:'Atlanta',state:'GA',region:'southeast'},{name:'Savannah',state:'GA',region:'southeast'},{name:'Athens',state:'GA',region:'southeast'},{name:'Decatur',state:'GA',region:'southeast'},{name:'Roswell',state:'GA',region:'southeast'},{name:'Augusta',state:'GA',region:'southeast'},
+  // HAWAII
+  {name:'Honolulu',state:'HI',region:'pacific_northwest'},{name:'Kailua',state:'HI',region:'pacific_northwest'},{name:'Lahaina',state:'HI',region:'pacific_northwest'},{name:'Hilo',state:'HI',region:'pacific_northwest'},
+  // IDAHO
+  {name:'Boise',state:'ID',region:'mountain_west'},{name:'Coeur d\'Alene',state:'ID',region:'mountain_west'},{name:'Sun Valley',state:'ID',region:'mountain_west'},{name:'Moscow',state:'ID',region:'mountain_west'},
+  // ILLINOIS (8)
+  {name:'Chicago',state:'IL',region:'midwest'},{name:'Naperville',state:'IL',region:'midwest'},{name:'Evanston',state:'IL',region:'midwest'},{name:'Oak Park',state:'IL',region:'midwest'},{name:'Springfield',state:'IL',region:'midwest'},{name:'Champaign',state:'IL',region:'midwest'},{name:'Lake Forest',state:'IL',region:'midwest'},{name:'Galena',state:'IL',region:'midwest'},
+  // INDIANA
+  {name:'Indianapolis',state:'IN',region:'midwest'},{name:'Carmel',state:'IN',region:'midwest'},{name:'Bloomington',state:'IN',region:'midwest'},{name:'Fort Wayne',state:'IN',region:'midwest'},{name:'Zionsville',state:'IN',region:'midwest'},
+  // IOWA
+  {name:'Des Moines',state:'IA',region:'midwest'},{name:'Iowa City',state:'IA',region:'midwest'},{name:'Cedar Rapids',state:'IA',region:'midwest'},{name:'Ames',state:'IA',region:'midwest'},
+  // KANSAS
+  {name:'Kansas City (KS)',state:'KS',region:'midwest'},{name:'Overland Park',state:'KS',region:'midwest'},{name:'Lawrence',state:'KS',region:'midwest'},{name:'Wichita',state:'KS',region:'midwest'},
+  // KENTUCKY
+  {name:'Louisville',state:'KY',region:'southeast'},{name:'Lexington',state:'KY',region:'southeast'},{name:'Bowling Green',state:'KY',region:'southeast'},{name:'Berea',state:'KY',region:'southeast'},
+  // LOUISIANA
+  {name:'New Orleans',state:'LA',region:'southeast'},{name:'Baton Rouge',state:'LA',region:'southeast'},{name:'Lafayette',state:'LA',region:'southeast'},{name:'Shreveport',state:'LA',region:'southeast'},{name:'Covington',state:'LA',region:'southeast'},
+  // MAINE
+  {name:'Portland',state:'ME',region:'northeast'},{name:'Bar Harbor',state:'ME',region:'northeast'},{name:'Camden',state:'ME',region:'northeast'},{name:'Kennebunkport',state:'ME',region:'northeast'},
+  // MARYLAND
+  {name:'Baltimore',state:'MD',region:'northeast'},{name:'Bethesda',state:'MD',region:'northeast'},{name:'Annapolis',state:'MD',region:'northeast'},{name:'Columbia',state:'MD',region:'northeast'},{name:'Frederick',state:'MD',region:'northeast'},{name:'Ocean City',state:'MD',region:'northeast'},
+  // MASSACHUSETTS
+  {name:'Boston',state:'MA',region:'northeast'},{name:'Cambridge',state:'MA',region:'northeast'},{name:'Brookline',state:'MA',region:'northeast'},{name:'Northampton',state:'MA',region:'northeast'},{name:'Lexington (MA)',state:'MA',region:'northeast'},{name:'Worcester',state:'MA',region:'northeast'},
+  // MICHIGAN
+  {name:'Ann Arbor',state:'MI',region:'midwest'},{name:'Grand Rapids',state:'MI',region:'midwest'},{name:'Traverse City',state:'MI',region:'midwest'},{name:'Detroit',state:'MI',region:'midwest'},{name:'Royal Oak',state:'MI',region:'midwest'},{name:'Holland',state:'MI',region:'midwest'},
+  // MINNESOTA
+  {name:'Minneapolis',state:'MN',region:'midwest'},{name:'St. Paul',state:'MN',region:'midwest'},{name:'Edina',state:'MN',region:'midwest'},{name:'Rochester',state:'MN',region:'midwest'},{name:'Duluth',state:'MN',region:'midwest'},
+  // MISSISSIPPI
+  {name:'Oxford',state:'MS',region:'southeast'},{name:'Hattiesburg',state:'MS',region:'southeast'},{name:'Ridgeland',state:'MS',region:'southeast'},{name:'Ocean Springs',state:'MS',region:'southeast'},
+  // MISSOURI
+  {name:'Kansas City (MO)',state:'MO',region:'midwest'},{name:'St. Louis',state:'MO',region:'midwest'},{name:'Columbia (MO)',state:'MO',region:'midwest'},{name:'Springfield (MO)',state:'MO',region:'midwest'},{name:'Clayton',state:'MO',region:'midwest'},
+  // MONTANA
+  {name:'Bozeman',state:'MT',region:'mountain_west'},{name:'Missoula',state:'MT',region:'mountain_west'},{name:'Helena',state:'MT',region:'mountain_west'},{name:'Whitefish',state:'MT',region:'mountain_west'},
+  // NEBRASKA
+  {name:'Omaha',state:'NE',region:'midwest'},{name:'Lincoln',state:'NE',region:'midwest'},{name:'Grand Island',state:'NE',region:'midwest'},{name:'Kearney',state:'NE',region:'midwest'},
+  // NEVADA
+  {name:'Las Vegas',state:'NV',region:'west'},{name:'Reno',state:'NV',region:'west'},{name:'Henderson',state:'NV',region:'west'},{name:'Summerlin',state:'NV',region:'west'},
+  // NEW HAMPSHIRE
+  {name:'Concord',state:'NH',region:'northeast'},{name:'Portsmouth',state:'NH',region:'northeast'},{name:'Hanover',state:'NH',region:'northeast'},{name:'Nashua',state:'NH',region:'northeast'},
+  // NEW JERSEY (8)
+  {name:'Westfield',state:'NJ',region:'northeast'},{name:'Hoboken',state:'NJ',region:'northeast'},{name:'Princeton',state:'NJ',region:'northeast'},{name:'Montclair',state:'NJ',region:'northeast'},{name:'Summit',state:'NJ',region:'northeast'},{name:'Morristown',state:'NJ',region:'northeast'},{name:'Cape May',state:'NJ',region:'northeast'},{name:'Red Bank',state:'NJ',region:'northeast'},
+  // NEW MEXICO
+  {name:'Santa Fe',state:'NM',region:'southwest'},{name:'Albuquerque',state:'NM',region:'southwest'},{name:'Las Cruces',state:'NM',region:'southwest'},{name:'Taos',state:'NM',region:'southwest'},
+  // NEW YORK (10)
+  {name:'New York City',state:'NY',region:'northeast'},{name:'Chappaqua',state:'NY',region:'northeast'},{name:'Scarsdale',state:'NY',region:'northeast'},{name:'Ithaca',state:'NY',region:'northeast'},{name:'Saratoga Springs',state:'NY',region:'northeast'},{name:'Buffalo',state:'NY',region:'northeast'},{name:'Rochester (NY)',state:'NY',region:'northeast'},{name:'Bronxville',state:'NY',region:'northeast'},{name:'Woodstock',state:'NY',region:'northeast'},{name:'Sag Harbor',state:'NY',region:'northeast'},
+  // NORTH CAROLINA
+  {name:'Charlotte',state:'NC',region:'southeast'},{name:'Raleigh-Durham',state:'NC',region:'southeast'},{name:'Asheville',state:'NC',region:'southeast'},{name:'Chapel Hill',state:'NC',region:'southeast'},{name:'Wilmington (NC)',state:'NC',region:'southeast'},{name:'Greenville (NC)',state:'NC',region:'southeast'},
+  // NORTH DAKOTA
+  {name:'Fargo',state:'ND',region:'midwest'},{name:'Bismarck',state:'ND',region:'midwest'},{name:'Grand Forks',state:'ND',region:'midwest'},{name:'Minot',state:'ND',region:'midwest'},
+  // OHIO
+  {name:'Columbus',state:'OH',region:'midwest'},{name:'Cleveland',state:'OH',region:'midwest'},{name:'Cincinnati',state:'OH',region:'midwest'},{name:'Shaker Heights',state:'OH',region:'midwest'},{name:'Yellow Springs',state:'OH',region:'midwest'},{name:'Hudson (OH)',state:'OH',region:'midwest'},
+  // OKLAHOMA
+  {name:'Oklahoma City',state:'OK',region:'southwest'},{name:'Tulsa',state:'OK',region:'southwest'},{name:'Norman',state:'OK',region:'southwest'},{name:'Edmond',state:'OK',region:'southwest'},
+  // OREGON
+  {name:'Portland (OR)',state:'OR',region:'pacific_northwest'},{name:'Bend',state:'OR',region:'pacific_northwest'},{name:'Eugene',state:'OR',region:'pacific_northwest'},{name:'Ashland',state:'OR',region:'pacific_northwest'},{name:'Hood River',state:'OR',region:'pacific_northwest'},
+  // PENNSYLVANIA
+  {name:'Philadelphia',state:'PA',region:'northeast'},{name:'Pittsburgh',state:'PA',region:'northeast'},{name:'State College',state:'PA',region:'northeast'},{name:'Lancaster',state:'PA',region:'northeast'},{name:'Media',state:'PA',region:'northeast'},{name:'Doylestown',state:'PA',region:'northeast'},
+  // RHODE ISLAND
+  {name:'Providence',state:'RI',region:'northeast'},{name:'Newport',state:'RI',region:'northeast'},{name:'Narragansett',state:'RI',region:'northeast'},{name:'Barrington',state:'RI',region:'northeast'},
+  // SOUTH CAROLINA
+  {name:'Charleston',state:'SC',region:'southeast'},{name:'Greenville (SC)',state:'SC',region:'southeast'},{name:'Hilton Head',state:'SC',region:'southeast'},{name:'Clemson',state:'SC',region:'southeast'},{name:'Beaufort',state:'SC',region:'southeast'},
+  // SOUTH DAKOTA
+  {name:'Sioux Falls',state:'SD',region:'midwest'},{name:'Rapid City',state:'SD',region:'midwest'},{name:'Deadwood',state:'SD',region:'midwest'},{name:'Brookings',state:'SD',region:'midwest'},
+  // TENNESSEE
+  {name:'Nashville',state:'TN',region:'southeast'},{name:'Franklin (TN)',state:'TN',region:'southeast'},{name:'Chattanooga',state:'TN',region:'southeast'},{name:'Knoxville',state:'TN',region:'southeast'},{name:'Memphis',state:'TN',region:'southeast'},
+  // TEXAS (10)
+  {name:'Austin',state:'TX',region:'southwest'},{name:'Dallas',state:'TX',region:'southwest'},{name:'Houston',state:'TX',region:'southwest'},{name:'San Antonio',state:'TX',region:'southwest'},{name:'Fort Worth',state:'TX',region:'southwest'},{name:'Plano',state:'TX',region:'southwest'},{name:'Fredericksburg',state:'TX',region:'southwest'},{name:'Marfa',state:'TX',region:'southwest'},{name:'The Woodlands',state:'TX',region:'southwest'},{name:'McKinney',state:'TX',region:'southwest'},
+  // UTAH
+  {name:'Salt Lake City',state:'UT',region:'mountain_west'},{name:'Park City',state:'UT',region:'mountain_west'},{name:'Provo',state:'UT',region:'mountain_west'},{name:'St. George',state:'UT',region:'mountain_west'},{name:'Moab',state:'UT',region:'mountain_west'},
+  // VERMONT
+  {name:'Burlington',state:'VT',region:'northeast'},{name:'Stowe',state:'VT',region:'northeast'},{name:'Woodstock (VT)',state:'VT',region:'northeast'},{name:'Montpelier',state:'VT',region:'northeast'},
+  // VIRGINIA
+  {name:'Alexandria',state:'VA',region:'northeast'},{name:'Richmond',state:'VA',region:'northeast'},{name:'Charlottesville',state:'VA',region:'northeast'},{name:'Arlington (VA)',state:'VA',region:'northeast'},{name:'Virginia Beach',state:'VA',region:'northeast'},{name:'Roanoke',state:'VA',region:'northeast'},
+  // WASHINGTON
+  {name:'Seattle',state:'WA',region:'pacific_northwest'},{name:'Bellevue',state:'WA',region:'pacific_northwest'},{name:'Tacoma',state:'WA',region:'pacific_northwest'},{name:'Olympia',state:'WA',region:'pacific_northwest'},{name:'Spokane',state:'WA',region:'pacific_northwest'},{name:'Leavenworth',state:'WA',region:'pacific_northwest'},
+  // WEST VIRGINIA
+  {name:'Charleston (WV)',state:'WV',region:'southeast'},{name:'Shepherdstown',state:'WV',region:'southeast'},{name:'Lewisburg',state:'WV',region:'southeast'},{name:'Morgantown',state:'WV',region:'southeast'},
+  // WISCONSIN
+  {name:'Madison',state:'WI',region:'midwest'},{name:'Milwaukee',state:'WI',region:'midwest'},{name:'Door County',state:'WI',region:'midwest'},{name:'Cedarburg',state:'WI',region:'midwest'},{name:'Green Bay',state:'WI',region:'midwest'},
+  // WYOMING
+  {name:'Jackson',state:'WY',region:'mountain_west'},{name:'Cody',state:'WY',region:'mountain_west'},{name:'Sheridan',state:'WY',region:'mountain_west'},{name:'Laramie',state:'WY',region:'mountain_west'},
+  // Washington D.C.
+  {name:'Washington, DC',state:'DC',region:'northeast'}
+];
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
 
 // Additional city lists (short) to reach 300+ when expanded
 const extras = {
@@ -339,6 +448,7 @@ function enrich(name,state,region){
 
 // Build locations list (may be disabled via CONFIG.enableListings)
 let LOCATIONS = [];
+<<<<<<< HEAD
 
 async function initLocations(){
   if(!CONFIG.enableListings){
@@ -365,12 +475,19 @@ async function initLocations(){
   if(mandatory.length === 0) console.warn('No external mandatory locations found; LOCATIONS may be limited.');
 
   // populate LOCATIONS using `enrich` to add tags/estimates
+=======
+if(CONFIG.enableListings){
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   for(const it of mandatory){
     const region = it.region || REGIONS_MAP[it.state] || 'midwest';
     LOCATIONS.push(enrich(it.name,it.state,region));
   }
 
+<<<<<<< HEAD
   // add extras (small curated list) to increase coverage
+=======
+  // add extras
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   for(const st in extras){
     const arr = extras[st];
     for(const nm of arr){
@@ -378,10 +495,18 @@ async function initLocations(){
     }
   }
 
+<<<<<<< HEAD
   // synthetic filler names to ensure variety
   const fillerNames = [
     'Lincoln','Riverton','Fairview','Centerville','Oak Grove','Maplewood','Riverside','Highland','Clearwater','Springfield','Summit','Cedar Grove','Pleasantville',' Meadowbrook','Willow Creek','Sunnyside','Edgewater','Rosewood','Hillside','Silver Lake'
   ];
+=======
+  // add synthetic extra names from states until >=600 (more potential places)
+  const fillerNames = [
+    'Lincoln','Riverton','Fairview','Centerville','Oak Grove','Maplewood','Riverside','Highland','Clearwater','Springfield','Summit','Cedar Grove','Pleasantville',' Meadowbrook','Willow Creek','Sunnyside','Edgewater','Rosewood','Hillside','Silver Lake'
+  ];
+  // iterate states to fill
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   const states = Object.keys(REGIONS_MAP);
   let si=0; while(LOCATIONS.length<600){
     const state = states[si % states.length];
@@ -390,6 +515,7 @@ async function initLocations(){
     si++;
   }
 
+<<<<<<< HEAD
   if(LOCATIONS.length < 300) console.warn('locations less than 300', LOCATIONS.length);
 
   // initialize scores now that LOCATIONS exists
@@ -399,15 +525,29 @@ async function initLocations(){
 // Kick off location initialization (runs asynchronously in browser)
 initLocations();
 
+=======
+  // ensure at least 300
+  if(LOCATIONS.length < 300) console.warn('locations less than 300', LOCATIONS.length);
+} else {
+  console.log('Listings disabled by CONFIG; LOCATIONS is empty');
+}
+
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
 // --- App state ---
 const state = {
   onboarding: {budget:null,homeType:[],timeline:null,mustHaves:''},
   answers: [],
+<<<<<<< HEAD
   answerTitles: [],
   scores: {},
   currentQ: 0,
   saved: JSON.parse(localStorage.getItem('homeswipe_saved')||'[]'),
   job: { jobLocation: '', commuteMax: 30, commuteMode: 'car', preferredRegion: '', preferredStates: [] }
+=======
+  scores: {},
+  currentQ: 0,
+  saved: JSON.parse(localStorage.getItem('homeswipe_saved')||'[]')
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
 };
 
 // init scores
@@ -423,6 +563,7 @@ function showScreen(id){ qsa('.screen').forEach(s=>s.classList.remove('active'))
 // Landing -> Occupation (new flow)
 qs('#start-btn').addEventListener('click',()=>{ showScreen('#screen-occupation'); });
 
+<<<<<<< HEAD
 // Occupation (job location) handlers
 qs('#commute-max').addEventListener('input', e=>{ qs('#commute-val').textContent = e.target.value; state.job.commuteMax = parseInt(e.target.value,10); });
 qs('#occupation-continue').addEventListener('click', e=>{ e.preventDefault();
@@ -431,6 +572,18 @@ qs('#occupation-continue').addEventListener('click', e=>{ e.preventDefault();
   state.job.preferredStates = (qs('#preferred-states').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
   state.job.commuteMode = qs('#commute-mode') ? qs('#commute-mode').value : 'car';
   state.currentQuestions = QUESTIONS; // keep main quiz; job occupation no longer requested
+=======
+// Occupation handlers
+state.job = { occupation: '', commuteMax: 30, preferredRegion: '', preferredStates: [] };
+qs('#commute-max').addEventListener('input', e=>{ qs('#commute-val').textContent = e.target.value; state.job.commuteMax = parseInt(e.target.value,10); });
+qs('#occupation-continue').addEventListener('click', e=>{ e.preventDefault(); state.job.occupation = qs('#occupation-input').value || ''; state.job.preferredRegion = qs('#preferred-region').value || ''; state.job.preferredStates = (qs('#preferred-states').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
+  // ask whether to take a short job-specific 15-question quiz
+  if(confirm('Take a short 15-question job-specific quiz now? (You can skip)')){
+    state.currentQuestions = buildJobQuestions(state.job.occupation);
+  } else {
+    state.currentQuestions = QUESTIONS;
+  }
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   startQuiz();
 });
 
@@ -479,7 +632,10 @@ function startQuiz(){
   // persist onboarding
   localStorage.setItem('homeswipe_onboard', JSON.stringify(state.onboarding));
   state.currentQ = 0; state.answers = []; resetScores();
+<<<<<<< HEAD
   state.answerTitles = [];
+=======
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   // ensure we have a questions set
   if(!state.currentQuestions) state.currentQuestions = QUESTIONS;
   showQuestion(0);
@@ -512,8 +668,11 @@ function makeCard(side,which){
   const emoji = document.createElement('div'); emoji.className='card-emoji'; emoji.textContent=side.emoji;
   const title = document.createElement('div'); title.className='card-title'; title.textContent=side.title;
   header.appendChild(emoji); header.appendChild(title);
+<<<<<<< HEAD
   // apply gradient header from the question data for a cleaner look
   if(side.gradient) { header.style.background = side.gradient; header.style.color = '#fff'; header.style.padding = '12px'; header.style.borderRadius = '12px'; }
+=======
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   card.appendChild(header);
   const pros = document.createElement('div'); pros.className='card-pros';
   side.pros.forEach(p=>{ const el = document.createElement('div'); el.innerHTML=`<span class="dot-pro">•</span> ${p}`; pros.appendChild(el); });
@@ -530,7 +689,10 @@ function chooseOption(option){
   // animate (simplified)
   // record answer tags
   state.answers.push(option.tags);
+<<<<<<< HEAD
   state.answerTitles.push(option.title);
+=======
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   // scoring: +3 per exact tag
   for(const t of option.tags){
     for(const loc of LOCATIONS){
@@ -588,7 +750,10 @@ function formatRegionName(r){
 // Skip and Back
 qs('#skip-btn').addEventListener('click',e=>{ e.preventDefault(); const qset = state.currentQuestions || QUESTIONS; const next = state.currentQ+1; const hintIndexes = [8,16,24,32,40].filter(i=> i <= qset.length); if(hintIndexes.includes(next)) showHintOverlay(next); else showQuestion(next); });
 qs('#back-btn').addEventListener('click',e=>{ e.preventDefault(); if(state.answers.length>0){ state.answers.pop(); // TODO ideally remove score contributions (not implemented: simplified approach)
+<<<<<<< HEAD
   state.answerTitles.pop();
+=======
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   // we will recompute scores from scratch from answers
   resetScores(); for(const ans of state.answers){ for(const t of ans){ for(const loc of LOCATIONS){ if(loc.tags.includes(t)) state.scores[loc.name+'|'+loc.state]+=3; } }}
  }
@@ -598,7 +763,11 @@ qs('#back-btn').addEventListener('click',e=>{ e.preventDefault(); if(state.answe
 qs('#exit-quiz').addEventListener('click',e=>{ e.preventDefault(); if(confirm('Exit quiz and return to landing? Progress will be saved.')){ showScreen('#screen-landing'); } });
 
 // Finish quiz
+<<<<<<< HEAD
 async function finishQuiz(){
+=======
+function finishQuiz(){
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   // Scoring: for each location, count how many answered questions
   // have at least one tag that matches the location. Then score is
   // (matches / total questions in quiz) rounded to nearest percent.
@@ -606,6 +775,7 @@ async function finishQuiz(){
   const totalQuestions = qset.length || 1;
   // apply preferred region/state filters if provided
   let pool = LOCATIONS.slice();
+<<<<<<< HEAD
   // if user provided a job location, try to narrow by commute distance
   function findJobLocation(input){
     if(!input) return null;
@@ -646,6 +816,8 @@ async function finishQuiz(){
     // if pool becomes empty, fallback to full LOCATIONS to avoid empty results
     if(pool.length === 0) pool = LOCATIONS.slice();
   }
+=======
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   if(state.job){
     if(state.job.preferredRegion){ pool = pool.filter(l=> l.region === state.job.preferredRegion); }
     if(state.job.preferredStates && state.job.preferredStates.length){ pool = pool.filter(l=> state.job.preferredStates.includes(l.state)); }
@@ -662,6 +834,7 @@ async function finishQuiz(){
   ranked.sort((a,b)=> b.score - a.score || b.matches - a.matches);
   state.ranked = ranked.map(r=>({k: r.loc.name+'|'+r.loc.state, raw: r.matches, score: r.score}));
   state.top10 = ranked.slice(0,10).map(r=> ({...r.loc, score: r.score }));
+<<<<<<< HEAD
 
   // If user provided a job location, attempt geocoding to compute real distances
   if(state.job && state.job.jobLocation){
@@ -777,6 +950,14 @@ function showResults(){
     const note = document.createElement('div'); note.style.marginTop='8px'; note.style.color='#444'; note.innerHTML = `<small>Showing places within <strong>${state.job.commuteMax} miles</strong> of <strong>${state.job.jobLocation}</strong> using <strong>${state.job.commuteMode}</strong> commute assumptions.</small>`;
     grid.appendChild(note);
   }
+=======
+  showResults();
+}
+
+function showResults(){
+  showScreen('#screen-results');
+  const grid = qs('#results-grid'); grid.innerHTML='';
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
   // Matched (score > 0)
   const matched = state.top10;
   const matchedSection = document.createElement('div'); matchedSection.innerHTML = `<h3>Your Top Matches</h3>`;

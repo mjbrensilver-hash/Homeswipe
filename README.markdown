@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## OSRM (California) Setup
 
 This project can integrate with a local OSRM routing backend to compute precise driving-route distances for California (NorCal & SoCal). A helper script is provided at `bin/setup_osrm_california.sh` that downloads the Geofabrik PBFs and starts OSRM containers (requires Docker).
@@ -36,4 +37,9 @@ chmod +x bin/setup_osrm_usa.sh
 
 This will start an OSRM routed container on `http://localhost:5000` that the app will use for precise driving distances.
 If you don't have the resources, prefer regional extracts (per-state or NorCal/SoCal) instead.
+=======
+d
+=
+
+>>>>>>> d657564dde181c648960b96b09d8298b21c544e1
 [Read the docs](https://docs.stevelosh.com/d/).
